@@ -1,0 +1,47 @@
+name: Deploy Angular App to AWS
+
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Motivo o acción para disparar el workflow'
+        required: false
+        default: 'Acción manual'
+
+  push:
+    branches:
+      - main
+    
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Chequea el código
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    # 2. Configura acceso SSH con el archivo .pem
+    - name: Configure SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.CLAVEEDR }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        
+     # 3. Asegúrate de agregar la clave del host al archivo known_hosts
+    - name: Configure SSH Host
+      run: |
+        touch ~/.ssh/known_hosts
+        ssh-keyscan -H ${{ secrets.DOMINIOEDR }} >> ~/.ssh/known_hosts
+
+    # 4. Prueba la conexión SSH al servidor
+    - name: Test SSH Connection
+      run: |
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.USUARIOEDR }}@${{ secrets.DOMINIOEDR }} "hostname"
+
+    # 5. Reinicia el servidor web
+    - name: Restart Web Server
+      run: |
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.USUARIOEDR }}@${{ secrets.DOMINIOEDR }} << 'EOF'
+        sudo systemctl restart apache2  # Si usas otro servidor web, ajusta este comando.
+        EOF

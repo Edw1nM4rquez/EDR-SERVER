@@ -1,0 +1,73 @@
+# Archivos generados por el sistema operativo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencias
+/node_modules/
+/vendor/
+
+# Compilados
+/dist/
+/build/
+/out-tsc/
+
+# Archivos de configuración del entorno
+.env
+.env.local
+.env.*.local
+
+# Archivos de bases de datos locales
+*.sqlite
+*.sql
+*.bak
+
+# Configuración del IDE
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# Archivos temporales
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# Cache
+/.cache/
+/.pnp/
+/.pnp.js
+
+# Angular y TypeScript
+.angular/
+*.ngfactory.*
+*.ngsummary.*
+
+# Laravel
+/storage/*.key
+/public/storage
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+.env.testing
+
+# Otros
+*.log
+*.bak
+*.pid
+*.seed
+*.pid.lock
+
+# Ignorar archivos generados al ejecutar tests
+/coverage/
+/test-results/
+
+# Exclusiones específicas de XAMPP
+htdocs/*.tmp

@@ -1,10 +1,17 @@
 name: Deploy Angular App to AWS
 
 on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Motivo o acción para disparar el workflow'
+        required: false
+        default: 'Acción manual'
+
   push:
     branches:
-      - main  # Rama principal que dispara el despliegue.
-
+      - main
+    
 jobs:
   deploy:
     runs-on: ubuntu-latest

@@ -23,6 +23,7 @@ app.post('/slack-command', async (req, res) => {
     const REPO = process.env.REPOINFO; // Reemplaza con tu repositorio
     const WORKFLOW_FILE = 'main.yml'; // Reemplaza con el nombre del archivo .yml
     const BRANCH = 'main'; // Rama desde donde ejecutar el workflow
+
     try {
         // Llamada a la API de GitHub para disparar el Action
         const response = await axios.post(
@@ -38,7 +39,7 @@ app.post('/slack-command', async (req, res) => {
                 }
             }
         );
-
+        
         res.send(`Acción '${text}' disparada por ${user_name}.`);
     } catch (error) {
         console.error('Error al disparar el Action:', error.response?.data || error.message);

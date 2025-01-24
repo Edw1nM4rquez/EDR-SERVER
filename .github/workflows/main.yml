@@ -43,7 +43,7 @@ jobs:
     - name: Restart Web Server
       run: |
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.USUARIOEDR }}@${{ secrets.DOMINIOEDR }} << 'EOF'
-        sudo 
+        sudo su
         systemctl restart apache2  # Si usas otro servidor web, ajusta este comando.
         systemctl restart edrserver.service #Reiniciar el servicion de la web Ecommerce
         EOF

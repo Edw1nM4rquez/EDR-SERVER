@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       reason:
-        description: 'Motivo o acción para disparar el workflow'
+        description: 'Reinciar el servidor web por problemas o fallas en el mismo.'
         required: false
         default: 'Acción manual'
 
@@ -43,12 +43,14 @@ jobs:
     - name: Restart Web Server
       run: |
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.USUARIOEDR }}@${{ secrets.DOMINIOEDR }} << 'EOF'
-        sudo systemctl restart apache2  # Si usas otro servidor web, ajusta este comando.
+        sudo 
+        systemctl restart apache2  # Si usas otro servidor web, ajusta este comando.
+        systemctl restart edrserver.service #Reiniciar el servicion de la web Ecommerce
         EOF
     - name: Notify Slack
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       run: |
         curl -X POST -H 'Content-type: application/json' --data '{
-          "text": "El servidor fue reiniciado exitosamente :white_check_mark:"
+          "text": "El servidor fue reiniciado exitosamente por ${{ github.event.inputs.reason }}:white_check_mark:"
         }' $SLACK_WEBHOOK_URL

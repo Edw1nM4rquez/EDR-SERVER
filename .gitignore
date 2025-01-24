@@ -71,3 +71,4 @@ yarn-error.log
 
 # Exclusiones específicas de XAMPP
 htdocs/*.tmp
+.vercel

@@ -9,7 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const SITE_URL = process.env.HOST;
-const CHECK_INTERVAL = 6000; // Intervalo para verificar (1 minuto)
+const CHECK_INTERVAL = 60000; // Intervalo para verificar (1 minuto)
 const SLACK_WEBHOOK_URL = process.env.SLAKURL;
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -80,9 +80,9 @@ async function checkWebsite() {
       console.error(
         `⚠️ El sitio ${SITE_URL} devolvió el estado: ${response.status}`
       );
-      await sendSlackNotification(
-        `⚠️ El sitio ${SITE_URL} devolvió el estado HTTP ${response.status}.`
-      );
+      // await sendSlackNotification(
+      //   `⚠️ El sitio ${SITE_URL} devolvió el estado HTTP ${response.status}.`
+      // );
     }
   } catch (error) {
     console.error(

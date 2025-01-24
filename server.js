@@ -58,7 +58,7 @@ app.post("/slack-command", async (req, res) => {
     );
     res.send(
       "Error al intentar disparar el Action. Verifica los logs del servidor.",
-      error.response?.data || error.message
+      error?.response?.data || error?.message || error
     );
   }
 });

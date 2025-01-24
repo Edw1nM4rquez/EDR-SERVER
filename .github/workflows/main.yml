@@ -52,5 +52,5 @@ jobs:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       run: |
         curl -X POST -H 'Content-type: application/json' --data '{
-          "text": "El servidor fue reiniciado exitosamente por ${{ github.event.inputs.reason }}:white_check_mark:"
+          "text": "El servidor fue reiniciado exitosamente por ${{ github.event.inputs.reason }} :white_check_mark:"
         }' $SLACK_WEBHOOK_URL

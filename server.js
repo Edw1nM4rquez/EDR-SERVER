@@ -9,7 +9,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const SITE_URL = process.env.HOST;
-const CHECK_INTERVAL = 60000; // Intervalo para verificar (1 minuto)
+const SITE_URL_ADMIN = process.env.HOST_ADMIN;
+const CHECK_INTERVAL = 6000; // Intervalo para verificar (1 minuto)
 const SLACK_WEBHOOK_URL = process.env.SLAKURL;
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -68,8 +69,6 @@ app.post("/slack-command", async (req, res) => {
 });
 
 
-
-
 // Función para verificar el estado del sitio web
 async function checkWebsite() {
   try {
@@ -80,9 +79,9 @@ async function checkWebsite() {
       console.error(
         `⚠️ El sitio ${SITE_URL} devolvió el estado: ${response.status}`
       );
-      // await sendSlackNotification(
-      //   `⚠️ El sitio ${SITE_URL} devolvió el estado HTTP ${response.status}.`
-      // );
+      await sendSlackNotification(
+        `⚠️ El sitio ${SITE_URL} devolvió el estado HTTP ${response.status}.`
+      );
     }
   } catch (error) {
     console.error(
@@ -93,6 +92,34 @@ async function checkWebsite() {
     );
   }
 }
+
+// Función para verificar el estado del sitio web
+async function checkWebsiteAdmin() {
+  try {
+    const response = await axios.get(SITE_URL_ADMIN);
+    if (response.status === 200) {
+      console.log(`✅ El sitio ${SITE_URL_ADMIN} está funcionando correctamente.`);
+      // await sendSlackNotification(
+      //   `✅ El sitio ${SITE_URL_ADMIN} está funcionando correctamente.`
+      // );
+    } else {
+      console.error(
+        `⚠️ El sitio ${SITE_URL_ADMIN} devolvió el estado: ${response.status}`
+      );
+      await sendSlackNotification(
+        `⚠️ El sitio ${SITE_URL} devolvió el estado HTTP ${response.status}.`
+      );
+    }
+  } catch (error) {
+    console.error(
+      `❌ No se pudo acceder al sitio ${SITE_URL_ADMIN}: ${error.message}`
+    );
+    await sendSlackNotification(
+      `❌ No se pudo acceder al sitio ${SITE_URL_ADMIN}. Error: ${error.message}`
+    );
+  }
+}
+
 
 // Función para enviar notificaciones a Slack
 async function sendSlackNotification(message) {
@@ -113,8 +140,7 @@ async function sendSlackNotification(message) {
 
 // Inicia la verificación automática del sitio
 setInterval(checkWebsite, CHECK_INTERVAL);
-
-
+setInterval(checkWebsiteAdmin, CHECK_INTERVAL);
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
